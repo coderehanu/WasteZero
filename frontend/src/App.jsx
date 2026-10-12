@@ -1841,12 +1841,17 @@ function App() {
 
       {/* Main App Workspace */}
       <main className="main-content">
-        {/* Sleek Topbar matching Slide 1 */}
+        {/* Sleek Enterprise Topbar */}
         <header className="topbar">
           <div className="topbar-left">
-            <div className="topbar-greeting">
-              <h2>Inventory Command Center</h2>
-              <p>Real-time waste prevention, risk analytics & recovery actions.</p>
+            <div className="topbar-breadcrumb">
+              <span className="breadcrumb-brand">WasteZero</span>
+              <span className="breadcrumb-separator">/</span>
+              <span className="breadcrumb-current">{activePage}</span>
+              <span className="live-status-pill">
+                <span className="pulse-dot"></span>
+                Live Sync
+              </span>
             </div>
             <div className="search-box">
               <span className="search-icon">🔍</span>
@@ -1859,7 +1864,7 @@ function App() {
               {searchText ? (
                 <button
                   type="button"
-                  style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)", fontSize: "14px", cursor: "pointer", background: "none", border: "none" }}
+                  className="search-clear-btn"
                   onClick={() => setSearchText("")}
                   title="Clear search"
                 >
@@ -1874,38 +1879,47 @@ function App() {
           <div className="topbar-right">
             {/* Facility Filter */}
             <div className="facility-filter">
-              <span>🏢</span>
+              <span className="filter-icon">🏢</span>
               <select
                 value={selectedWarehouseFilter}
                 onChange={(e) => setSelectedWarehouseFilter(e.target.value)}
               >
-                <option value="ALL">All Warehouses ({warehouses.length})</option>
+                <option value="ALL">All Facilities ({warehouses.length})</option>
                 {warehouses.map((w) => (
                   <option key={w.id} value={String(w.id)}>{w.warehouseCode} ({w.location})</option>
                 ))}
               </select>
             </div>
 
+            {/* Quick Refresh Icon */}
+            <button
+              className="topbar-action-btn"
+              onClick={loadDashboard}
+              title="Refresh live data"
+              disabled={loading}
+            >
+              <span className={`refresh-icon ${loading ? "spinning" : ""}`}>↻</span>
+            </button>
+
             {/* Theme Toggle Button */}
             <button
-              className="btn-secondary"
-              style={{ padding: "7px 12px", fontSize: "13px" }}
+              className="theme-toggle-btn"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              title="Toggle Theme"
+              title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
             >
               {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
             </button>
 
             {/* Role Switcher */}
             <div className="role-badge">
-              <span>Role:</span>
+              <span className="role-label">Role:</span>
               <select
                 className="role-select"
                 value={currentRole}
                 onChange={(e) => setCurrentRole(e.target.value)}
               >
-                <option value="SupplyChainManager">Supply Chain Manager</option>
-                <option value="InventoryManager">Inventory Manager</option>
+                <option value="SupplyChainManager">Supply Chain Mgr</option>
+                <option value="InventoryManager">Inventory Mgr</option>
                 <option value="WarehouseManager">Warehouse Lead</option>
                 <option value="ESGExecutive">Sustainability Lead</option>
               </select>
@@ -1916,7 +1930,7 @@ function App() {
               <div className="user-avatar">WZ</div>
               <div className="user-meta">
                 <span className="user-name">Enterprise Ops</span>
-                <span className="user-title">Active Session</span>
+                <span className="user-title">Active</span>
               </div>
             </div>
           </div>
@@ -1926,13 +1940,37 @@ function App() {
         <div className="page-workspace">
           <div className="page-header">
             <div className="page-title-group">
-              <div className="eyebrow">WASTE MANAGEMENT INTELLIGENCE</div>
-              <h1>{activePage}</h1>
-              <p>{pageDescriptions[activePage]}</p>
+              <div className="eyebrow-pill">
+                <span className="eyebrow-dot"></span>
+                Waste Management Intelligence Platform
+              </div>
+              <h1>{activePage === "Dashboard" ? "Inventory Command Center" : activePage}</h1>
+              <p className="page-subtitle">
+                {activePage === "Dashboard"
+                  ? "Real-time waste prevention, risk analytics, and automated value recovery across facilities."
+                  : pageDescriptions[activePage]}
+              </p>
             </div>
             <div className="page-header-actions">
+              {activePage === "Dashboard" && (
+                <>
+                  <button
+                    className="btn-secondary"
+                    onClick={() => setShowCsvModal(true)}
+                  >
+                    📥 Import CSV
+                  </button>
+                  <button
+                    className="btn-secondary"
+                    onClick={handleCalculateAllRisks}
+                    disabled={calculatingRisks}
+                  >
+                    {calculatingRisks ? "Analyzing..." : "⚡ Recalculate Risks"}
+                  </button>
+                </>
+              )}
               <button
-                className="btn-secondary"
+                className="btn-primary"
                 onClick={loadDashboard}
                 disabled={loading}
               >

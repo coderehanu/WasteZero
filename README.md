@@ -3,6 +3,12 @@
 > **AI-Powered Inventory Optimization & Perishable Waste Reduction System**  
 > *Transforming retail supply chains from reactive discard to proactive markdown, redistribution, and recovery.*
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-brightgreen?style=for-the-badge&logo=github)](https://coderehanu.github.io/WasteZero/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github)](https://github.com/coderehanu/WasteZero)
+
+🌐 **Live Deployed Application:** **[https://coderehanu.github.io/WasteZero/](https://coderehanu.github.io/WasteZero/)**  
+📂 **GitHub Repository:** **[https://github.com/coderehanu/WasteZero](https://github.com/coderehanu/WasteZero)**
+
 ---
 
 ## 🌟 Overview

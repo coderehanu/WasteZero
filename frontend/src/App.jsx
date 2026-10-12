@@ -2,6 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import api from "./api/api";
 import AnalyticsCharts from "./components/AnalyticsCharts";
+import {
+  mockProducts,
+  mockBatches,
+  mockWarehouses,
+  mockRiskScores,
+  mockCampaigns,
+  mockTransfers,
+} from "./mockData";
 import "./App.css";
 
 const today = () => {
@@ -158,12 +166,12 @@ function App() {
   const [selectedWarehouseFilter, setSelectedWarehouseFilter] = useState("ALL");
 
   // Core entities
-  const [products, setProducts] = useState([]);
-  const [batches, setBatches] = useState([]);
-  const [warehouses, setWarehouses] = useState([]);
-  const [riskScores, setRiskScores] = useState([]);
-  const [campaigns, setCampaigns] = useState([]);
-  const [transfers, setTransfers] = useState([]);
+  const [products, setProducts] = useState(mockProducts);
+  const [batches, setBatches] = useState(mockBatches);
+  const [warehouses, setWarehouses] = useState(mockWarehouses);
+  const [riskScores, setRiskScores] = useState(mockRiskScores);
+  const [campaigns, setCampaigns] = useState(mockCampaigns);
+  const [transfers, setTransfers] = useState(mockTransfers);
   const [recommendations, setRecommendations] = useState([]);
 
   // Stats
@@ -247,8 +255,16 @@ function App() {
 
       const getArrayResult = (index) => getArray(getResult(index)?.data);
 
-      setProducts(getArrayResult(0));
-      setBatches(getArrayResult(1));
+      const prodRes = getArrayResult(0);
+      const batchRes = getArrayResult(1);
+      const riskRes = getArrayResult(6);
+      const whRes = getArrayResult(7);
+      const campRes = getArrayResult(8);
+      const transRes = getArrayResult(9);
+      const recRes = getArrayResult(10);
+
+      setProducts(prodRes.length > 0 ? prodRes : mockProducts);
+      setBatches(batchRes.length > 0 ? batchRes : mockBatches);
 
       const wasteVal = readNumber(getResult(2));
       const savedVal = readNumber(getResult(3));
@@ -260,11 +276,11 @@ function App() {
         totalSavedQuantity: readNumber(getResult(5)) || 1400,
       });
 
-      setRiskScores(getArrayResult(6));
-      setWarehouses(getArrayResult(7));
-      setCampaigns(getArrayResult(8));
-      setTransfers(getArrayResult(9));
-      setRecommendations(getArrayResult(10));
+      setRiskScores(riskRes.length > 0 ? riskRes : mockRiskScores);
+      setWarehouses(whRes.length > 0 ? whRes : mockWarehouses);
+      setCampaigns(campRes.length > 0 ? campRes : mockCampaigns);
+      setTransfers(transRes.length > 0 ? transRes : mockTransfers);
+      setRecommendations(recRes);
     } catch (err) {
       setError(getErrorMessage(err, "Unable to load live dashboard data."));
     } finally {
